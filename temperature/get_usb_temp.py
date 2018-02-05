@@ -24,6 +24,8 @@ DEVICE_FEATURE_USAGE = 786432
 
 
 def parse_data(raw_data):
+  # Data is received 10 bytes at a time. The 4th and 5th bytes and the 6th and
+  # 7th bytes represent the temperature and humidity as shorts, respectively.
   assert len(raw_data) == 9, 'raw data in unknown format'
   assert all(isinstance(d, int) for d in raw_data), (
       'raw data in unknown format')
@@ -124,7 +126,8 @@ def main():
 
   try:
     temp_sensor_device.open()
-    poll_temperature(temp_sensor_device, args.poll_interval, args.report_file)
+    return poll_temperature(
+        temp_sensor_device, args.poll_interval, args.report_file)
   finally:
     temp_sensor_device.close()
 
